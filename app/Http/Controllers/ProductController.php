@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -34,7 +35,14 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Product::create([
+            'category_id' => $request->category,
+            'name' => $request->name,
+            'quantity' => $request->quantity,
+            'description' => $request->description,
+        ]); 
+
+        return back();
     }
 
     /**
