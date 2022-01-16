@@ -11,8 +11,6 @@ class Product extends Model
 
     protected $fillable = ['name', 'quantity', 'description', 'image'];
 
-    Hello Rada test
-
     public function category(){
         return $this->belongsTo(Category::class);
     }
