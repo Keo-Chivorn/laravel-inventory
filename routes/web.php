@@ -19,3 +19,9 @@ use App\Http\Controllers\ProductController;
 Route::get('/admin', [DashboardController::class, 'index']);
 
 Route::resource('product', ProductController::class);
+
+//test for login
+Route::get('/login', function(){
+    return view('auth.login');
+});
+
