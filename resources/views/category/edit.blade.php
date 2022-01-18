@@ -1,18 +1,19 @@
-<div class="modal fade" id="form-create" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="form-edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Create Product</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Edit Category</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
 
-            <form action="{!! route('product.store') !!}" method="POST">
+            <form action="{!! route('category.update',1) !!}" method="POST">
                 {{ csrf_field() }}
-                
-                @include("product.form")
+                {{ method_field('PATCH') }}
+
+                <div class="dynamic"></div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

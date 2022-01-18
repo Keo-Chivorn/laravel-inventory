@@ -20,6 +20,14 @@ Route::get('/admin', [DashboardController::class, 'index']);
 
 Route::resource('product', ProductController::class);
 
+Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
+Route::get('/category/create', [CategoryController::class, 'create'])->name('category.create');
+Route::get('/category/edit/{category}', [CategoryController::class, 'edit'])->name('category.create');
+Route::post('/category/store', [CategoryController::class, 'store'])->name('category.store');
+Route::post('/category/update{category}', [CategoryController::class, 'update'])->name('category.update');
+Route::get('/category/delete/{category}', [CategoryController::class, 'destroy'])->name('category.destroy');
+
+
 //test for login
 Route::get('/login', function(){
     return view('auth.login');
