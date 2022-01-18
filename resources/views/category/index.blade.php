@@ -14,7 +14,7 @@
                     <span class="text">Create</span>
                 </button>
 
-                @include('category/create')
+                @include('category.create')
 
             </div>
         </div>
@@ -48,7 +48,8 @@
                                         <a type="button" data-toggle="modal" data-target="#form-edit" data-whatever="@mdo" data-category={!! $category->id !!} class="btn btn-success btn-circle btn-edit">
                                             <i class="fas fa-pen"></i>
                                         </a>
-                                        @include('category/edit')
+
+                                        @include('category.edit')
         
                                         <a href="{!! route("category.destroy",$category->id) !!}" class="btn btn-danger btn-circle btn-delete">
                                             <i class="fas fa-trash"></i>
@@ -126,6 +127,7 @@
                 type: "GET",
                 url: "category/edit/"+category,
                 success: function (data) {
+                    console.log(data.html);
                     $(".dynamic").html(data.html);
                 },
             });
