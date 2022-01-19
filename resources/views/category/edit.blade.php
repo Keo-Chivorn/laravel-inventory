@@ -9,9 +9,8 @@
                 </button>
             </div>
 
-            <form action="{!! route('category.update',1) !!}" method="POST">
+            <form id="form-update" action="" method="POST">
                 {{ csrf_field() }}
-                {{ method_field('PATCH') }}
 
                 <div class="dynamic"></div>
 

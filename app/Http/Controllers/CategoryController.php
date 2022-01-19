@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class CategoryController extends Controller
 {
@@ -14,7 +15,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::paginate(5);
+
         return view("category.index",[
             'categories' => $categories
         ]);
@@ -43,6 +45,7 @@ class CategoryController extends Controller
             'description' => $request->description
         ]);
 
+        Alert::success('Success', 'Category was created successfully');
         return back();
     }
 
@@ -54,7 +57,7 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        dd("show");
+        //
     }
 
     /**
@@ -67,7 +70,7 @@ class CategoryController extends Controller
     {
         if($request->ajax()){
             $category = Category::findOrFail($request->category);
-            $html = view('category/form', [
+            $html = view('category.form', [
                 'category' => $category
             ])->render();
             return response()->json([
@@ -85,7 +88,15 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $category = Category::findOrFail($request->category);
+
+        $category->update([
+            'name' => $request->name,
+            'description' => $request->description
+        ]);
+
+        Alert::success('Success', 'Category was updated successfully');
+        return back();
     }
 
     /**
@@ -98,6 +109,8 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($id);
         $category->delete();
+
+        Alert::success('Success', 'Category was deleted successfully');
         return back();
     }
 }

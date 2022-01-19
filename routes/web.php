@@ -24,7 +24,7 @@ Route::get('/category', [CategoryController::class, 'index'])->name('category.in
 Route::get('/category/create', [CategoryController::class, 'create'])->name('category.create');
 Route::get('/category/edit/{category}', [CategoryController::class, 'edit'])->name('category.create');
 Route::post('/category/store', [CategoryController::class, 'store'])->name('category.store');
-Route::post('/category/update{category}', [CategoryController::class, 'update'])->name('category.update');
+Route::post('/category/update/{category}', [CategoryController::class, 'update'])->name('category.update');
 Route::get('/category/delete/{category}', [CategoryController::class, 'destroy'])->name('category.destroy');
 
 
