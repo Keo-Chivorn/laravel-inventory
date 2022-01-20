@@ -1,3 +1,7 @@
+@php
+    use App\Models\Category;
+    $categories = Category::all();
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -67,21 +71,16 @@
                 Products
             </div>
 
-            <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
-            </li>
-
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
-            </li>
-
+            @if (count($categories))
+                @foreach ($categories as $category)
+                    <li class="nav-item">
+                        <a class="nav-link" href="charts.html">
+                            <i class="fas fa-fw fa-chart-area"></i>
+                            <span>{!! $category->name !!}</span></a>
+                    </li>
+                @endforeach
+            @endif
             
-
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
@@ -275,7 +274,7 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @include('sweetalert::alert')
-    
+
     @yield('script')
 
 </body>
