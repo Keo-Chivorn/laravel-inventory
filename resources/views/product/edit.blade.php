@@ -9,11 +9,10 @@
                 </button>
             </div>
 
-            <form action="{!! route('product.update',1) !!}" method="POST">
+            <form  id="form-update" action="" method="POST">
                 {{ csrf_field() }}
-                {{ method_field('PATCH') }}
 
-                @include("product.form")
+                <div class="dynamic"></div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ProductController extends Controller
 {
@@ -12,9 +17,18 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view("product.index");
+        $products = Product::where("category_id", $request->category)->get();
+
+        if(!count($products)){
+            Alert::error("Error", "Something went wrong");
+            return redirect()->route("dashboard");
+        }
+        
+        return view("product.index",[
+            'products' => $products
+        ]);
     }
 
     /**
@@ -35,13 +49,28 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        Product::create([
-            'category_id' => $request->category,
-            'name' => $request->name,
-            'quantity' => $request->quantity,
-            'description' => $request->description,
-        ]); 
+        $category = Category::findOrFail($request->category);
+        
+        DB::beginTransaction();
+        try{
 
+            $category->products()->create([
+                'name' => $request->name,
+                'quantity' => $request->quantity,
+                'description' => $request->description,
+            ]); 
+            DB::commit();
+
+        }catch(Exception $ex){
+
+            DB::rollBack();
+            Log::info("Create Product >>>".$ex->getMessage());
+            Alert::error('Error', 'Something went wrong');
+            return back();
+
+        }
+        
+        Alert::success('Success', 'Product was created successfully');
         return back();
     }
 
@@ -62,9 +91,17 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        if($request->ajax()){
+            $product = Product::findOrFail($request->product);
+            $html = view('product.form', [
+                'product' => $product
+            ])->render();
+            return response()->json([
+                'html'=>$html
+            ]);
+        }
     }
 
     /**

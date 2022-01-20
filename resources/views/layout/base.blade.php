@@ -1,7 +1,3 @@
-@php
-    use App\Models\Category;
-    $categories = Category::all();
-@endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,7 +26,7 @@
 
     <!-- Page Wrapper -->
     <div id="wrapper">
-
+        
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
@@ -70,11 +66,14 @@
             <div class="sidebar-heading">
                 Products
             </div>
-
+            @php
+                use App\Models\Category;
+                $categories = Category::all();
+            @endphp
             @if (count($categories))
                 @foreach ($categories as $category)
                     <li class="nav-item">
-                        <a class="nav-link" href="charts.html">
+                        <a class="nav-link" href="{!! route("product.index",["category"=>$category->id]) !!}">
                             <i class="fas fa-fw fa-chart-area"></i>
                             <span>{!! $category->name !!}</span></a>
                     </li>
