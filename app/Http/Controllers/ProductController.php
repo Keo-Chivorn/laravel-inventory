@@ -20,11 +20,6 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $products = Product::where("category_id", $request->category)->get();
-
-        if(!count($products)){
-            Alert::error("Error", "Something went wrong");
-            return redirect()->route("dashboard");
-        }
         
         return view("product.index",[
             'products' => $products
@@ -113,7 +108,33 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $product = Product::findOrFail($request->product);
+        $category = Category::findOrFail($request->category);
+        DB::beginTransaction();
+        try{
+
+            $product->update([
+                'name' => $request->name,
+                'quantity' => $request->quantity,
+                'description' => $request->description,
+                'category_id'=> $category->id
+            ]); 
+
+            DB::commit();
+
+        }catch(Exception $ex){
+
+            DB::rollBack();
+            Log::info("Create Product >>>".$ex->getMessage());
+            Alert::error('Error', 'Something went wrong');
+            return back();
+
+        }
+        
+        Alert::success('Success', 'Product was updated successfully');
+        return redirect()->route('product.index', [
+            'category' => $category->id
+        ]);
     }
 
     /**
@@ -124,6 +145,17 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $category = $product->category;
+        $product->delete();
+
+        if(count($category->products)){
+            Alert::success('Success', 'Product was deleted successfully');
+            return back();
+        }
+
+        Alert::success('Success', 'Product was deleted successfully');
+        return redirect()->route("dashboard");
+        
     }
 }

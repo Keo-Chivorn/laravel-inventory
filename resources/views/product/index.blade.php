@@ -9,12 +9,12 @@
         </div>
         <div class="col-md-6 col-sm-6">
             <div class="float-md-right float-sm-left">
-                <a href="#" class="btn btn-secondary btn-icon-split mb-2  mr-1">
+                {{-- <a href="#" class="btn btn-secondary btn-icon-split mb-2  mr-1">
                     <span class="text">Name</span>
                 </a>
                 <a href="#" class="btn btn-secondary btn-icon-split mb-2 mr-1">
                     <span class="text">Qty</span>
-                </a>
+                </a> --}}
                 <button type="button" data-toggle="modal" data-target="#form-create" data-whatever="@mdo"
                     class="btn btn-primary btn-icon-split mb-2 mr-1">
                     <span class="text">Create</span>
@@ -53,7 +53,7 @@
                                 <td>NULL</td>
                                 <td>{!! $product->name !!}</td>
                                 <td>{!! $product->category->name !!}</td>
-                                <td>{!! $product->description !!}</td>
+                                <td>{!! $product->description ?? "N/A" !!}</td>
                                 <td>{!! $product->quantity !!}</td>
                                 <td class="d-flex justify-content-between" width="120">
                                     <a type="button" data-toggle="modal" data-target="#form-edit" data-whatever="@mdo" data-product={!! $product->id !!} class="btn btn-success btn-circle btn-edit">
@@ -88,9 +88,10 @@
 @section('script')
 <script>
     $(document).ready(function(){
-
+        //sweet alert
         $(".btn-delete").click(function(e){
             e.preventDefault();
+            var self = $(this).attr('href');
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -101,11 +102,7 @@
                 confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire(
-                    'Deleted!',
-                    'Your file has been deleted.',
-                    'success'
-                    )
+                    location.href = self;
                 }
             })
         });

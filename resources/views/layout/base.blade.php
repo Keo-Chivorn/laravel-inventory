@@ -72,11 +72,13 @@
             @endphp
             @if (count($categories))
                 @foreach ($categories as $category)
-                    <li class="nav-item">
-                        <a class="nav-link" href="{!! route("product.index",["category"=>$category->id]) !!}">
-                            <i class="fas fa-fw fa-chart-area"></i>
-                            <span>{!! $category->name !!}</span></a>
-                    </li>
+                    @if(count($category->products) || $loop->first)
+                        <li class="nav-item">
+                            <a class="nav-link" href="{!! route("product.index",["category"=>$category->id]) !!}">
+                                <i class="fas fa-fw fa-chart-area"></i>
+                                <span>{!! $category->name !!}</span></a>
+                        </li>
+                    @endif
                 @endforeach
             @endif
             

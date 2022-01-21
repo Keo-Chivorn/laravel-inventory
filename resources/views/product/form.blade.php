@@ -20,7 +20,7 @@
         <label for="category" class="col-form-label">Category</label>
         <select name="category" id="category">
             @foreach ($categories as $category)
-                <option 
+                <option value="{!! $category->id !!}"
                 @if (isset($product))
                     {!! $product->category->id == $category->id ? "selected" : "" !!}
                 @endif
