@@ -9,7 +9,7 @@
                 </button>
             </div>
 
-            <form action="{!! route('category.store') !!}" method="POST">
+            <form action="{!! route('category.store') !!}" method="POST" enctype="multipart/form-data">
                 {{ csrf_field() }}
 
                 @include("category.form")

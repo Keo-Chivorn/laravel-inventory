@@ -33,8 +33,9 @@
                         <tr>
                             <th>No</th>
                             <th>Name</th>
+                            <th>Image</th>
                             <th>Description</th>
-                            <th class="text-center"width="120">Action</th>
+                            <th class="text-center"width="110">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,9 +43,16 @@
                             @foreach ($categories as $category)
                                 <tr>
                                     <td>{!! $loop->index+1 !!}</td>
+                                    <td>
+                                        @if ($category->image)
+                                            <img src="{!! asset("uploads/images/categories/$category->image") !!}" alt="" height="100">
+                                        @else
+                                            {!! "N/A" !!}
+                                        @endif
+                                    </td>
                                     <td>{!! $category->name ?? 'N/A' !!}</td>
                                     <td>{!! $category->description ?? 'N/A'  !!}</td>
-                                    <td class="d-flex justify-content-between" width="120">
+                                    <td>
                                         <a type="button" data-toggle="modal" data-target="#form-edit" data-whatever="@mdo" data-category={!! $category->id !!} class="btn btn-success btn-circle btn-edit">
                                             <i class="fas fa-pen"></i>
                                         </a>

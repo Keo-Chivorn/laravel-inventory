@@ -41,9 +41,19 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+
+        $img_name = null;
+
+        if($request->image){
+            $file_img = $request->image;
+            $img_name = time().'.'.$file_img->extension();  
+            $file_img->move(public_path('uploads/images/categories'), $img_name);
+        }
+
         $category = Category::create([
             'name' => $request->name,
-            'description' => $request->description
+            'description' => $request->description,
+            'image' => $request->image ? $img_name : null
         ]);
 
         Alert::success('Success', 'Category was created successfully');
@@ -91,9 +101,21 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($request->category);
 
+        if($request->image){
+            if(!is_null($category->image) &&File::exists("uploads/images/categories/".$category->image)){
+                unlink("uploads/images/categories/".$category->image);
+            }
+
+            $file_img = $request->image;
+            $img_name = time().'.'.$file_img->extension();  
+            $file_img->move(public_path('uploads/images/categories/'), $img_name);
+        }
+
         $category->update([
             'name' => $request->name,
-            'description' => $request->description
+            'description' => $request->description,
+            'image' => $request->image ? $img_name : $category->image,
+            
         ]);
 
         Alert::success('Success', 'Category was updated successfully');
@@ -109,6 +131,10 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::findOrFail($id);
+
+        if(!is_null($category->image) && File::exists("uploads/images/categories/".$category->image)){
+            unlink("uploads/images/categories/".$category->image);
+        }
 
         if(count($category->products)){
             foreach($category->products as $product){

@@ -124,7 +124,7 @@ class ProductController extends Controller
         try{
 
             if($request->image){
-                if(File::exists("uploads/images/products/".$product->image)){
+                if(!is_null($product->image) && File::exists("uploads/images/products/".$product->image)){
                     unlink("uploads/images/products/".$product->image);
                 }
 

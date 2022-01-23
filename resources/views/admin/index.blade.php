@@ -59,7 +59,7 @@
                         <div class="h5 mb-0 font-weight-bold text-gray-800">{!! count($category->products) !!}</div>
                     </div>
                     <div class="col-auto">
-                        <img src="{!! asset(" img/company-logo.jpg") !!}" alt="" width="50">
+                        <img src="{!! asset("uploads/images/categories/$category->image") !!}" alt="Sorry" width="50">
                     </div>
                 </div>
             </div>
