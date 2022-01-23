@@ -113,8 +113,8 @@ class CategoryController extends Controller
         if(count($category->products)){
             foreach($category->products as $product){
                 if(!is_null($product->image)){
-                    if(File::exists("uploads/images/".$product->image)){
-                        unlink("uploads/images/".$product->image);
+                    if(File::exists("uploads/images/products/".$product->image)){
+                        unlink("uploads/images/products/".$product->image);
                     }
                 }
             }

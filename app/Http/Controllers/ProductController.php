@@ -57,7 +57,7 @@ class ProductController extends Controller
             if($request->image){
                 $file_img = $request->image;
                 $img_name = time().'.'.$file_img->extension();  
-                $file_img->move(public_path('uploads/images'), $img_name);
+                $file_img->move(public_path('uploads/images/products'), $img_name);
             }
 
             $category->products()->create([
@@ -124,13 +124,13 @@ class ProductController extends Controller
         try{
 
             if($request->image){
-                if(File::exists("uploads/images/".$product->image)){
-                    unlink("uploads/images/".$product->image);
+                if(File::exists("uploads/images/products/".$product->image)){
+                    unlink("uploads/images/products/".$product->image);
                 }
 
                 $file_img = $request->image;
                 $img_name = time().'.'.$file_img->extension();  
-                $file_img->move(public_path('uploads/images'), $img_name);
+                $file_img->move(public_path('uploads/images/products/'), $img_name);
             }
 
             $product->update([
@@ -169,8 +169,8 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $category = $product->category;
 
-        if(File::exists("uploads/images/".$product->image)){
-            unlink("uploads/images/".$product->image);
+        if(!is_null($product->image) && File::exists("uploads/images/products/".$product->image)){
+            unlink("uploads/images/products/".$product->image);
         }
 
         $product->delete();
