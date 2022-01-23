@@ -7,6 +7,7 @@ use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -20,9 +21,11 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $products = Product::where("category_id", $request->category)->get();
+        $category = Category::findOrFail($request->category);
         
         return view("product.index",[
-            'products' => $products
+            'products' => $products,
+            'category' => $category
         ]);
     }
 
@@ -44,25 +47,32 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+
         $category = Category::findOrFail($request->category);
         
         DB::beginTransaction();
         try{
+            $img_name = null;
+
+            if($request->image){
+                $file_img = $request->image;
+                $img_name = time().'.'.$file_img->extension();  
+                $file_img->move(public_path('uploads/images'), $img_name);
+            }
 
             $category->products()->create([
                 'name' => $request->name,
                 'quantity' => $request->quantity,
                 'description' => $request->description,
+                'image' => $img_name
             ]); 
             DB::commit();
 
         }catch(Exception $ex){
-
             DB::rollBack();
             Log::info("Create Product >>>".$ex->getMessage());
             Alert::error('Error', 'Something went wrong');
             return back();
-
         }
         
         Alert::success('Success', 'Product was created successfully');
@@ -113,9 +123,20 @@ class ProductController extends Controller
         DB::beginTransaction();
         try{
 
+            if($request->image){
+                if(File::exists("uploads/images/".$product->image)){
+                    unlink("uploads/images/".$product->image);
+                }
+
+                $file_img = $request->image;
+                $img_name = time().'.'.$file_img->extension();  
+                $file_img->move(public_path('uploads/images'), $img_name);
+            }
+
             $product->update([
                 'name' => $request->name,
                 'quantity' => $request->quantity,
+                'image' => $request->image ? $img_name : $product->image,
                 'description' => $request->description,
                 'category_id'=> $category->id
             ]); 
@@ -147,6 +168,11 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $category = $product->category;
+
+        if(File::exists("uploads/images/".$product->image)){
+            unlink("uploads/images/".$product->image);
+        }
+
         $product->delete();
 
         if(count($category->products)){

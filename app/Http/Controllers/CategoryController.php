@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class CategoryController extends Controller
@@ -108,6 +109,17 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::findOrFail($id);
+
+        if(count($category->products)){
+            foreach($category->products as $product){
+                if(!is_null($product->image)){
+                    if(File::exists("uploads/images/".$product->image)){
+                        unlink("uploads/images/".$product->image);
+                    }
+                }
+            }
+        }
+
         $category->delete();
 
         Alert::success('Success', 'Category was deleted successfully');

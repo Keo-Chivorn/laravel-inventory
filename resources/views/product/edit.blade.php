@@ -9,7 +9,7 @@
                 </button>
             </div>
 
-            <form  id="form-update" action="" method="POST">
+            <form  id="form-update" action="" method="POST" enctype="multipart/form-data">
                 {{ csrf_field() }}
 
                 <div class="dynamic"></div>

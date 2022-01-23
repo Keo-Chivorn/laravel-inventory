@@ -30,7 +30,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+            <h6 class="m-0 font-weight-bold text-primary">{!! $category->name !!}</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -43,19 +43,19 @@
                             <th>Category</th>
                             <th>Description</th>
                             <th>Quantity</th>
-                            <th class="text-center"width="120">Action</th>
+                            <th class="text-center" width="110">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($products as $product)
                             <tr>
                                 <td>{!! $loop->index+1 !!}</td>
-                                <td>NULL</td>
+                                <td><img src="{!! asset("uploads/images/$product->image") !!}" alt="" height="100"></td>
                                 <td>{!! $product->name !!}</td>
                                 <td>{!! $product->category->name !!}</td>
                                 <td>{!! $product->description ?? "N/A" !!}</td>
                                 <td>{!! $product->quantity !!}</td>
-                                <td class="d-flex justify-content-between" width="120">
+                                <td>
                                     <a type="button" data-toggle="modal" data-target="#form-edit" data-whatever="@mdo" data-product={!! $product->id !!} class="btn btn-success btn-circle btn-edit">
                                         <i class="fas fa-pen"></i>
                                     </a>
@@ -87,7 +87,11 @@
 
 @section('script')
 <script>
+
+    
+
     $(document).ready(function(){
+
         //sweet alert
         $(".btn-delete").click(function(e){
             e.preventDefault();
@@ -121,6 +125,7 @@
                 },
             });
         });
+
     });
 </script>
 @endsection

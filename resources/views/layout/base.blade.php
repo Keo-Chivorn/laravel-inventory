@@ -43,7 +43,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="{!! route("dashboard") !!}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -75,7 +75,7 @@
                     @if(count($category->products) || $loop->first)
                         <li class="nav-item">
                             <a class="nav-link" href="{!! route("product.index",["category"=>$category->id]) !!}">
-                                <i class="fas fa-fw fa-chart-area"></i>
+                                {{-- <i class="fas fa-fw fa-chart-area"></i> --}}
                                 <span>{!! $category->name !!}</span></a>
                         </li>
                     @endif
