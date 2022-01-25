@@ -50,7 +50,13 @@
                         @foreach ($products as $product)
                             <tr>
                                 <td>{!! $loop->index+1 !!}</td>
-                                <td><img src="{!! asset("uploads/images/products/$product->image") !!}" alt="" height="100"></td>
+                                <td>
+                                    @if ($product->image)
+                                        <img src="{!! asset("uploads/images/products/$product->image") !!}" alt="" height="100">
+                                    @else
+                                        {!! "N/A" !!}
+                                    @endif
+                                </td>
                                 <td>{!! $product->name !!}</td>
                                 <td>{!! $product->category->name !!}</td>
                                 <td>{!! $product->description ?? "N/A" !!}</td>

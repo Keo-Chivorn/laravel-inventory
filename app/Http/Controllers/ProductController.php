@@ -76,7 +76,9 @@ class ProductController extends Controller
         }
         
         Alert::success('Success', 'Product was created successfully');
-        return back();
+        return redirect()->route('product.index', [
+            'category' => $category->id
+        ]);
     }
 
     /**
@@ -146,7 +148,7 @@ class ProductController extends Controller
         }catch(Exception $ex){
 
             DB::rollBack();
-            Log::info("Create Product >>>".$ex->getMessage());
+            Log::info("Update Product >>>".$ex->getMessage());
             Alert::error('Error', 'Something went wrong');
             return back();
 

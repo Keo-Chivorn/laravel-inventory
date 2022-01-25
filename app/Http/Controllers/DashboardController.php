@@ -14,9 +14,11 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        $colors = ["primary", "secondary", "success", "danger", "warning", "info", "dark"];
         $categories = Category::all();
         return view("admin.index",[
-            'categories' => $categories
+            'categories' => $categories,
+            'colors' => $colors
         ]);
     }
 
