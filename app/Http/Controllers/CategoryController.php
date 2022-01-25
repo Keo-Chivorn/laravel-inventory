@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class CategoryController extends Controller
@@ -41,20 +44,29 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        DB::beginTransaction();
+        try{
+            $img_name = null;
 
-        $img_name = null;
+            if($request->image){
+                $file_img = $request->image;
+                $img_name = time().'.'.$file_img->extension();  
+                $file_img->move(public_path('uploads/images/categories'), $img_name);
+            }
+    
+            $category = Category::create([
+                'name' => $request->name,
+                'description' => $request->description,
+                'image' => $request->image ? $img_name : null
+            ]);
+            DB::commit();
 
-        if($request->image){
-            $file_img = $request->image;
-            $img_name = time().'.'.$file_img->extension();  
-            $file_img->move(public_path('uploads/images/categories'), $img_name);
+        }catch(Exception $ex){
+            DB::rollBack();
+            Log::info("Create Category >>>".$ex->getMessage());
+            Alert::error('Error', 'Something went wrong');
+            return back();
         }
-
-        $category = Category::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'image' => $request->image ? $img_name : null
-        ]);
 
         Alert::success('Success', 'Category was created successfully');
         return back();
@@ -101,22 +113,33 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($request->category);
 
-        if($request->image){
-            if(!is_null($category->image) &&File::exists("uploads/images/categories/".$category->image)){
-                unlink("uploads/images/categories/".$category->image);
+        DB::beginTransaction();
+        try{
+
+            if($request->image){
+                if(!is_null($category->image) &&File::exists("uploads/images/categories/".$category->image)){
+                    unlink("uploads/images/categories/".$category->image);
+                }
+
+                $file_img = $request->image;
+                $img_name = time().'.'.$file_img->extension();  
+                $file_img->move(public_path('uploads/images/categories/'), $img_name);
             }
 
-            $file_img = $request->image;
-            $img_name = time().'.'.$file_img->extension();  
-            $file_img->move(public_path('uploads/images/categories/'), $img_name);
-        }
+            $category->update([
+                'name' => $request->name,
+                'description' => $request->description,
+                'image' => $request->image ? $img_name : $category->image,
+                
+            ]);
+            DB::commit();
 
-        $category->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'image' => $request->image ? $img_name : $category->image,
-            
-        ]);
+        }catch(Exception $ex){
+            DB::rollBack();
+            Log::info("Update Category >>>".$ex->getMessage());
+            Alert::error('Error', 'Something went wrong');
+            return back();
+        }
 
         Alert::success('Success', 'Category was updated successfully');
         return back();
