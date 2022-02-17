@@ -24,7 +24,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Category</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -33,8 +33,9 @@
                         <tr>
                             <th>No</th>
                             <th>Name</th>
+                            <th>Image</th>
                             <th>Description</th>
-                            <th class="text-center"width="120">Action</th>
+                            <th class="text-center"width="110">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,9 +43,16 @@
                             @foreach ($categories as $category)
                                 <tr>
                                     <td>{!! $loop->index+1 !!}</td>
+                                    <td>
+                                        @if ($category->image)
+                                            <img src="{!! asset("uploads/images/categories/$category->image") !!}" alt="" height="100">
+                                        @else
+                                            {!! "N/A" !!}
+                                        @endif
+                                    </td>
                                     <td>{!! $category->name ?? 'N/A' !!}</td>
                                     <td>{!! $category->description ?? 'N/A'  !!}</td>
-                                    <td class="d-flex justify-content-between" width="120">
+                                    <td>
                                         <a type="button" data-toggle="modal" data-target="#form-edit" data-whatever="@mdo" data-category={!! $category->id !!} class="btn btn-success btn-circle btn-edit">
                                             <i class="fas fa-pen"></i>
                                         </a>
@@ -65,31 +73,8 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-12 col-md-6">
-            <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite">Showing 1 to 10 of 57
-                entries</div>
-        </div>
-        <div class="col-sm-12 col-md-6">
-            <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
-                <ul class="pagination float-right">
-                    <li class="paginate_button page-item previous disabled" id="dataTable_previous"><a href="#"
-                            aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li>
-                    <li class="paginate_button page-item active"><a href="#" aria-controls="dataTable" data-dt-idx="1"
-                            tabindex="0" class="page-link">1</a></li>
-                    <li class="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx="2"
-                            tabindex="0" class="page-link">2</a></li>
-                    <li class="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx="3"
-                            tabindex="0" class="page-link">3</a></li>
-                    <li class="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx="4"
-                            tabindex="0" class="page-link">4</a></li>
-                    <li class="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx="5"
-                            tabindex="0" class="page-link">5</a></li>
-                    <li class="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx="6"
-                            tabindex="0" class="page-link">6</a></li>
-                    <li class="paginate_button page-item next" id="dataTable_next"><a href="#" aria-controls="dataTable"
-                            data-dt-idx="7" tabindex="0" class="page-link">Next</a></li>
-                </ul>
-            </div>
+        <div class="col-md-12 float-right">
+            <div class="d-flex justify-content-start">{{ $categories->links() }}</div>
         </div>
     </div>
 
@@ -123,17 +108,16 @@
         $(".btn-edit").click(function (event) {
             event.preventDefault();
             var category = $(this).attr("data-category");
+            var url = "category/update/"+category;
             $.ajax({
                 type: "GET",
                 url: "category/edit/"+category,
                 success: function (data) {
-                    console.log(data.html);
                     $(".dynamic").html(data.html);
+                    $("#form-update").attr("action", url);
                 },
             });
-        
         });
-        
     });
 
     

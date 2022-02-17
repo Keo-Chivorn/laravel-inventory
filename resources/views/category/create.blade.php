@@ -9,10 +9,10 @@
                 </button>
             </div>
 
-            <form action="{!! route('category.store') !!}" method="POST">
+            <form action="{!! route('category.store') !!}" method="POST" enctype="multipart/form-data">
                 {{ csrf_field() }}
 
-                @include("category/form")
+                @include("category.form")
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
