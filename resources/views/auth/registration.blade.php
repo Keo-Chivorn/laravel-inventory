@@ -1,10 +1,13 @@
 @extends('layout.login')
 
 @section('form')
-    <form action="{!! route("login.custom") !!}" method="POST" class="user">
+    <form action="{!! route("register.custom") !!}" method="POST" class="user">
         @csrf
         <div class="form-group">
-            <input type="email" name="email" class="form-control form-control-user" id="email" aria-describedby="emailHelp" placeholder="Enter Email Address...">
+            <input type="name" name="name" class="form-control form-control-user" id="name"  placeholder="Name">
+        </div>
+        <div class="form-group">
+            <input type="email" name="email" class="form-control form-control-user" id="email"  placeholder="Enter Email Address...">
         </div>
         <div class="form-group">
             <input type="password" name="password" class="form-control form-control-user" id="password" placeholder="Password">
